@@ -30,9 +30,10 @@ url <- "https://birmingham-city-observatory.datopian.com/dataset/e39e6606-4720-4
 destfile <- "animal_rescue_info_wmids.xlsx"
 curl::curl_download(url, destfile)
 
-animal_dt <- read_excel(destfile, 
-                        col_types = c("date", "text", "text", 
-                       "text"), skip = 2)
+animal_dt <- read_excel(destfile
+                       , col_types = c("date", "text", "text", "text")
+                       , skip = 2
+                       , .name_repair = "universal")
 
 # like to view it first
 View(animal_dt)

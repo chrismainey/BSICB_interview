@@ -1,0 +1,90 @@
+---
+title: "Risk Stratification Tools"
+subtitle: "Deputy Director Specialist Analytics Interview"  
+author: 
+  - "Chris Mainey"
+date: '`r Sys.Date()`'
+output:
+  xaringan::moon_reader:
+    seal: false
+    css: theme.css
+    nature:
+      slideNumberFormat: "%current%"
+      highlightStyle: github
+      highlightLines: true
+      ratio: 16:9
+      countIncrementalSlides: true
+---
+
+```{r setup, include=FALSE}
+library(ragg)
+library(tidyverse)
+options(htmltools.dir.version = FALSE)
+knitr::opts_chunk$set(
+  fig.width=9, fig.height=3.5, fig.retina=3,
+  out.width = "100%",
+  cache = FALSE,
+  echo = TRUE,
+  message = FALSE, 
+  warning = FALSE,
+  hiline = TRUE,
+  dev = "ragg_png"
+)
+
+# Set up
+showtext::showtext_auto()
+sysfonts::font_add_google("Open Sans", "Open Sans")
+
+# ggplot defaults
+theme_set(
+  theme_classic(base_family = "Open Sans") +
+    theme(
+      axis.title = element_text(family="Open Sans"),
+      panel.background = element_blank(),
+      panel.grid = element_blank(),
+      axis.line = element_line(colour ="#425563"),
+      strip.background = element_rect(fill = "#c8cfd3"),
+      plot.title = element_text(face = "bold", size = 16),
+      plot.subtitle = element_text(face = "italic", size = 10)
+    )
+)
+
+```
+
+
+class: title-slide
+
+# Animal Rescues in the West Midlands
+
+<br><br>
+
+### Head Data Scientis Interview
+
+
+<br><br><br><br><br>
+
+### <img src="./assets/img/crop.png" alt="Mainard icon" height="40px" />  Dr Chris Mainey
+
+`r icons::icon_style(icons::fontawesome("envelope"), fill = "#005EB8")` [c.mainey@nhs.net](mailto:c.mainey@nhs.net)
+`r icons::icon_style(icons::fontawesome("twitter"), fill = "#005EB8")` [@chrismainey](https://twitter.com/chrismainey)
+`r icons::icon_style(icons::fontawesome("github"), fill = "#005EB8")` [chrismainey](https://github.com/chrismainey)
+`r icons::icon_style(icons::fontawesome("linkedin"), fill = "#005EB8")`  [chrismainey](https://www.linkedin.com/in/chrismainey/)
+`r icons::icon_style(icons::fontawesome("orcid"), fill = "#005EB8")` [0000-0002-3018-6171](https://orcid.org/0000-0002-3018-6171)
+`r icons::icon_style(icons::fontawesome("globe"), fill = "#005EB8")` [www.mainard.co.uk](https://www.mainard.co.uk)
+
+.footnote[Presentation and code available: **https://github.com/chrismainey/BSICB_interview**]
+
+.art_cap[R generative art - inspired by Antonio Sánchez Chinchón - @aschinchon]
+
+
+???
+
+__End 30 seconds__!
+
+Say hi - introduce myself
+
+???
+Presentation on github with references and code, share afterwards
+
+
+---

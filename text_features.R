@@ -187,3 +187,4 @@ animal_dt %>%
   geom_col(alpha=0.5, col = "black", position = position_stack(reverse = TRUE)) +
   scale_fill_manual(values = primary.colors(15, steps = 3, no.white = TRUE))+
   scale_x_discrete(guide = guide_axis(n.dodge = 2))
+

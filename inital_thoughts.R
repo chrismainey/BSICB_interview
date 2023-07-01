@@ -1,4 +1,5 @@
 library(ragg)
+library(showtext)
 library(tidyverse)
 library(readxl)
 library(fable)
@@ -6,8 +7,13 @@ library(feasts)
 library(tsibble)
 
 # Set up
-showtext::showtext_auto()
+
 sysfonts::font_add_google("Open Sans", "Open Sans")
+showtext::showtext_auto()
+
+# library(extrafont)
+# font_import()
+# yloadfonts(device = "win")
 
 # ggplot defaults
 theme_set(
@@ -38,6 +44,9 @@ animal_dt <- read_excel(destfile
 # like to view it first
 View(animal_dt)
 
+# Also add date format as it's easier for tidyverse
+
+animal_dt$dt <- as.Date(animal_dt$Incdate)
 
 # Initial thoughts, by date, morning/evening, location, type of animal in text.
 
@@ -46,9 +55,7 @@ max(animal_dt$dt)
 
 # Dates look like fiscal years 2013/14 - 2022/23 - 9 years?
 
-# Also add date format as it's easier for tidyverse
 
-animal_dt$dt <- as.Date(animal_dt$Incdate)
 
 
 ##### Consider as timeseries ####
@@ -92,6 +99,9 @@ has_gaps(animal_wm_ts)
 # seasonality
 animal_wm_ts %>% 
   gg_subseries(Rescues)
+
+animal_wm_ts %>% 
+  gg_season()
 
 
 # Check autocorrelation
@@ -191,7 +201,7 @@ animal_rf <-
 
 aminal_rolling_plot <-
   ggplot(animal_wm_ts, aes(x= as.Date(dt_month)))+
-  geom_line(aes(y=Rescues), linewidth=1)+
+  geom_line(aes(y=`4-MA`), linewidth=1)+
   geom_line(aes(y=.mean, col=.model), data=animal_rf, linewidth=1.2, alpha=0.6)+
   geom_smooth(aes(y=.mean, col=.model), method="lm", data=animal_rf, linewidth=1
               , se=FALSE, linetype="dashed", alpha=0.6)+
@@ -228,7 +238,7 @@ aminal_rolling_plot
 #### Distributions
 
 ggplot(animal_dt, aes(x=dt))+
-  geom_histogram(fill = "dodgerblue2", col = "black", alpha=0.5)+
+  geom_histogram(fill = "dodgerblue2", col = "black", alpha=0.5, bins=40)+
   #stat_summary(fun.y=mean,geom="line",lwd=2,aes(group=1))+
   scale_x_date(limits = c(as.Date("2013-04-01", format = "%Y-%M-%D"), as.Date("2023-04-01", format = "%Y-%M-%D"))
                ,date_breaks = "4 month", date_labels = "%Y-%m")+

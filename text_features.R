@@ -35,13 +35,35 @@ tokens <-
   animal_txt %>% 
   count(word, sort = TRUE)
 
-pal <- RColorBrewer::brewer.pal(8,"Dark2")
+pal <- RColorBrewer::brewer.pal(10,"Set3")
 
+pal <- fBasics::qualiPalette(30, name = "Dark2")
 
-# plot the 50 most common words
+# plot the 80 most common words
+set.seed(1224)
+CairoPNG("./outputs/animal_words.png")
 tokens  %>% 
-  with(wordcloud(word, n, random.order = FALSE, max.words = 80, colors=pal, ))
+  with(wordcloud(word, n, random.order = FALSE, max.words = 80, colors=pal))
+dev.off()
 
+# blank space around it is a pain.  Use magick to load again and crop
+
+# install.packages("magick")
+library(magick)
+
+# Reading a PNG
+image <- image_read('./outputs/animal_words.png')
+
+# Printing the image
+print(image, info = FALSE)
+
+image_info(image)
+
+r<-image_crop(image = image, geometry = "2300x250")
+r<-image_crop(image = image, geometry = "280x280+100+100")
+print(r, info = FALSE)
+
+image_write(r, path = './outputs/animal_words2.png')
 
 animal_txt  %>%
   count(word, sort = TRUE) %>% 

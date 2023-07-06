@@ -49,4 +49,48 @@ pop_2 <- pop_proj %>%
 pop <- 
   pop %>% 
   inner_join(pop_2) %>% 
-  pivot_longer(-laname20)
+  pivot_longer(-laname20) %>% 
+  mutate(year = as.numeric(substring(name, nchar(name)-3, nchar(name))))
+
+
+weighted_summary <- 
+  animal_dt %>% 
+  group_by(District, year) %>% 
+  summarise(Rescues = n()) %>% 
+  left_join(pop, by= join_by(District == laname20, year == year)) %>% 
+  mutate(prop = 1000 * Rescues/value)
+
+# Coventry notably lower
+total_weighted <-
+  weighted_summary %>% 
+  group_by(District) %>% 
+  summarise(Rescues = sum(Rescues),
+            popn = sum(value),
+            prop = 1000 * sum(Rescues)/sum(value)
+  )
+
+# plot for proportions
+total_weighted %>% 
+  select(District, "Rescues Per 1000 population" = prop, "Total Rescues" = Rescues) %>% 
+  pivot_longer(-District, names_to = "Measure") %>% 
+  ggplot(aes(x=District, fill = District, group=Measure))+
+  geom_col(aes(y=value), col=1, alpha=0.7, linewidth = 0.5)+
+  #geom_col(aes(y=Rescues), position =  position_nudge(x = 0.3),  width = 0.5)+
+  #scale_y_continuous(sec.axis = ~ .)+
+  scale_fill_viridis_d()+
+  facet_wrap(~Measure, scales = "free_y")+
+  #scale_x_discrete(guide = guide_axis(n.dodge = 2))+
+  theme(legend.position = "none",
+        axis.text.x = element_text(size = 12, angle=45, hjust = 1),
+        axis.title = element_blank())
+
+
+
+ggsave("./outputs/raw_vs_weighted.png",  device = png, type = "cairo", dpi = 300,
+       width = 4, height = 3, units = "in")
+
+animal_dt %>% 
+  distinct(year)
+
+pop %>% 
+  distinct(year)

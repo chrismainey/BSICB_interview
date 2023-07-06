@@ -1,7 +1,8 @@
 # Here is where we do the maps
+library(sf)
 library(sp)
 # Load library
-library(sf)
+
 
 # Load shapefile
 
@@ -39,8 +40,7 @@ typeof(map_set)
 # I've made a guess at 2018 here, after a lot of manual checking and back and forth I've cleaned up below.
 a<- animal_dt %>% 
   filter(dt >= "2018-04-01") %>% 
-  mutate(year = year(dt)) %>% 
-  group_by(District, Ward, year) %>% 
+  group_by(District, Ward, fyear) %>% 
   mutate(Rescues = n(),
          Ward = str_remove(Ward, " Ward")) %>% 
   left_join(shape_WM, c("Ward" = "WD19NM"))
@@ -67,8 +67,7 @@ animal_dt <-
 
 b<- animal_dt %>% 
   filter(dt < "2018-04-01") %>% 
-  mutate(year = year(dt)) %>% 
-  group_by(District, Ward, year) %>% 
+  group_by(District, Ward, fyear) %>% 
   mutate(Rescues = n(),
          Ward = str_trim((str_remove(Ward, " Ward")))) %>% 
   left_join(shape_WM_11, c("Ward" = "wd11nm"))
@@ -76,8 +75,8 @@ b<- animal_dt %>%
 
 # Combine two parts together
 map_set <- 
-  select(a, Incdate, year, District, Ward, Incident.Detail, dt, Rescues, geometry) %>% 
-  bind_rows(select(b, Incdate, year, District, Ward, Incident.Detail, dt, Rescues, geometry))
+  select(a, Incdate, fyear, District, Ward, Incident.Detail, dt, Rescues, geometry) %>% 
+  bind_rows(select(b, Incdate, fyear, District, Ward, Incident.Detail, dt, Rescues, geometry))
 
 
 theme_map <-function(){
@@ -96,9 +95,6 @@ theme_map <-function(){
 library(gganimate)
 library(transformr)
 
-# expand the WM set to match the mapping by year.
-yrs1 <- seq(2013, 2023)
-yrs1 <- seq(2018, 2023)
 
 map_set_agg <- 
   map_set %>% 
@@ -132,7 +128,7 @@ map1<- ggplot() +
   
   scale_fill_viridis_c(alpha=0.5)+
   #transition_time(year) +
-  labs(title ="Animal Rescuse by Ward 2013 - 2023"
+  labs(title ="Animal Rescuse by Ward, for fiscal years 2013/14 - 2022/23"
             , subtitle = "Data Source: https://www.cityobservatory.birmingham.gov.uk/@west-midlands-fire-service/animal-rescues") + 
   coord_sf()+
   theme_map()
@@ -167,9 +163,9 @@ yearsplt<- ggplot() +
   geom_sf_text(data = shape_WM_LA, aes(label = LAD19NM), col="black", size=2.7, fontface="bold")+
   
   scale_fill_viridis_c(alpha = 0.5, na.value = 0)+
-  transition_time(year) +
+  transition_states(fyear, transition_length = 0, state_length = 1) +
   #facet_wrap(~year)+
-  labs(title ="Animal Rescuse by Ward {frame_time}"
+  labs(title ="Animal Rescuse by Ward, for {next_state}"
        , subtitle = "Data Source: https://www.cityobservatory.birmingham.gov.uk/@west-midlands-fire-service/animal-rescues") + 
   coord_sf()+
   theme_void()+
@@ -183,8 +179,8 @@ yearsplt<- ggplot() +
 
 #yearsplt
 
-num_years <- max(map_set$year) - min(map_set$year)+1
-animate(yearsplt, nframes = num_years, duration = 20, device = "png")
+num_years <- as.numeric(length(levels(map_LA_agg_yr$fyear)))
+animate(yearsplt, nframes = num_years, duration = 15, device = "png")
 
 anim_save("./outputs/anim_wards_year.gif")
 

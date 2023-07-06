@@ -1,10 +1,11 @@
-library(ragg)
+library(Cairo)
 library(showtext)
 library(tidyverse)
 library(readxl)
 library(fable)
 library(feasts)
 library(tsibble)
+library(zoo)
 
 # Set up
 
@@ -19,13 +20,16 @@ showtext::showtext_auto()
 theme_set(
   theme_classic(base_family = "Open Sans") +
     theme(
+      text = element_text(family="Open Sans", size = 14),
       axis.title = element_text(family="Open Sans"),
+      axis.text = element_text(family="Open Sans", size = 14),
       panel.background = element_blank(),
       panel.grid = element_blank(),
       axis.line = element_line(colour ="#425563"),
       strip.background = element_rect(fill = "#c8cfd3"),
-      plot.title = element_text(face = "bold", size = 16),
-      plot.subtitle = element_text(face = "italic", size = 10)
+      plot.title = element_text(face = "bold", size = 18),
+      plot.subtitle = element_text(face = "italic", size = 14),
+      strip.text = element_text(size = 14)
     )
 )
 
@@ -54,6 +58,24 @@ min(animal_dt$dt)
 max(animal_dt$dt)
 
 # Dates look like fiscal years 2013/14 - 2022/23 - 9 years?
+animal_dt$year <- year(animal_dt$dt)
+animal_dt$yearmon <- as.yearmon(animal_dt$dt)
+animal_dt$fyear <- 
+  factor(
+  paste0(
+    as.character(
+      as.integer(animal_dt$yearmon - 3/12 + 1) - 1
+      )
+    , "/"
+    , substring(
+      as.character(
+        as.integer(
+          animal_dt$yearmon - 3/12 + 1)
+        ),
+      3
+      ,4)
+    )
+  , ordered = TRUE)
 
 
 
@@ -199,14 +221,14 @@ animal_rf <-
   animal_rf %>% 
   select(.model, dt_month, .model, `4-MA`, .mean, lcl, ucl)
 
-aminal_rolling_plot <-
+animal_rolling_plot <-
   ggplot(animal_wm_ts, aes(x= as.Date(dt_month)))+
-  geom_line(aes(y=`4-MA`), linewidth=1)+
-  geom_line(aes(y=.mean, col=.model), data=animal_rf, linewidth=1.2, alpha=0.6)+
-  geom_smooth(aes(y=.mean, col=.model), method="lm", data=animal_rf, linewidth=1
+  geom_line(aes(y=`4-MA`), linewidth=0.7)+
+  geom_line(aes(y=.mean, col=.model), data=animal_rf, linewidth=0.8, alpha=0.6)+
+  geom_smooth(aes(y=.mean, col=.model), method="lm", data=animal_rf, linewidth=0.7
               , se=FALSE, linetype="dashed", alpha=0.6)+
   geom_vline(xintercept = as.Date("01/04/2023", format = "%d/%m/%Y"), col = "red"
-             , linewidth = 1, linetype="dashed")+
+             , linewidth = 0.7, linetype="dashed")+
   #geom_ribbon(data=tno_hw, aes(ymin = lcl, ymax=ucl, x= Date, fill = Trust)
   #            , alpha=0.5)+
   #scale_y_continuous(breaks = seq(0,1000,200))+
@@ -221,17 +243,24 @@ aminal_rolling_plot <-
   ) +
   scale_color_manual("Model", values=c("#d8b365","#5ab4ac"))+
   labs(title = "Animal Rescues - West Midlands Region"
-       , subtitle = "Forecast computed by 'both ARIMA and Holt-Winters (additive) models', based on Apr-13 - Mar-23")+
+       , subtitle = "Four-month rolling average forecast, based on Apr-13 - Mar-23"
+       , y = "Average Animal Rescues")+
   theme(legend.position = "bottom",
-        axis.text.x = element_text(angle=90, size = 8, colour = "#595959"
-                                   , hjust = 1, ),
-        plot.subtitle = element_text(face="italic", size = 9)
+        axis.text.x = element_text(angle=45, size = 12, colour = "#595959"
+                                   , hjust = 1),
+        plot.subtitle = element_text(face="italic", size = 12),
+        legend.margin=margin(t=0, r=0, b=0, l=0, unit="cm"),
+        legend.key.height=unit(0, "cm"),      
+        plot.margin = unit(c(1,0.5,0,0.5), "lines")
   )
-# 
+ 
 
-aminal_rolling_plot
+animal_rolling_plot
 
+#ggsave("./outputs/four_month_rolling_forecast.png", )
 
+ggsave("./outputs/four_month_rolling_forecast.png", animal_rolling_plot, device = png, type = "cairo", dpi = 300,
+       width = 4, height = 3, units = "in")
 
 
 
@@ -247,10 +276,6 @@ ggplot(animal_dt, aes(x=dt))+
 
 
 
-
-
-
-# 
 
 
 

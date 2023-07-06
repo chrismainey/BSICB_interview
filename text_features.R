@@ -1,4 +1,7 @@
 library(tidytext)
+library(RColorBrewer)
+library(wordcloud)
+
 
 animal_txt <-
   animal_dt %>%
@@ -6,10 +9,12 @@ animal_txt <-
   unnest_tokens(word, Incident.Detail) %>% 
   count(id, word, sort = TRUE)
 
+# remove stop words and numerics
 data(stop_words)
 
 animal_txt  <- 
   animal_txt %>%
+  filter(!str_detect(word, "^[0-9]")) %>%
   anti_join(stop_words)
 
 
@@ -25,6 +30,17 @@ animal_txt  %>%
   ggplot(aes(n, word)) +
   geom_col() +
   labs(y = NULL)
+
+tokens <- 
+  animal_txt %>% 
+  count(word, sort = TRUE)
+
+pal <- RColorBrewer::brewer.pal(8,"Dark2")
+
+
+# plot the 50 most common words
+tokens  %>% 
+  with(wordcloud(word, n, random.order = FALSE, max.words = 80, colors=pal, ))
 
 
 animal_txt  %>%
@@ -140,19 +156,20 @@ animal_dt %>%
   group_by(animal) %>% 
   summarise(total=n()) %>%
   arrange(desc(total)) %>% 
-  mutate(animal = factor(animal, animal)) %>% 
+  #mutate(animal = factor(animal, animal)) %>% 
   ggplot(aes(y=total, x=animal, fill=animal))+
   geom_col(alpha=0.5, col = "black")+
   scale_fill_manual(values = primary.colors(15, steps = 3, no.white = TRUE))+
   scale_x_discrete(guide = guide_axis(n.dodge = 2))+
   theme(legend.position = "none")
 
+
 animal_dt %>% 
   filter(District != "Birmingham") %>% 
   group_by(District, animal) %>% 
   summarise(total=n()) %>%
   arrange(desc(total)) %>% 
-  mutate(animal = factor(animal, animal)) %>% 
+  #mutate(animal = factor(animal, animal)) %>% 
   ggplot(aes(y=total, x=animal, fill=animal))+
   geom_col(alpha=0.5, col = "black")+
   scale_fill_manual(values = primary.colors(15, steps = 3, no.white = TRUE))+
@@ -162,28 +179,28 @@ animal_dt %>%
 
 
 
-
-animal_dt <- 
-  animal_dt %>% 
-  mutate(dt_year = as.character(fiscal_year(yearquarter(Incdate, fiscal_start = 4))))
-
-animal_dt <- 
-  animal_dt %>% 
-  mutate(dt_year = paste0(as.character((as.numeric(dt_year) -1)),"/",substring(dt_year, 3,4)))
-
-animal_dt <- 
-  animal_dt %>% 
-  mutate(dt_year = factor(dt_year, unique(animal_dt$dt_year)))
+# 
+# animal_dt <- 
+#   animal_dt %>% 
+#   mutate(dt_year = as.character(fiscal_year(yearquarter(Incdate, fiscal_start = 4))))
+# 
+# animal_dt <- 
+#   animal_dt %>% 
+#   mutate(dt_year = paste0(as.character((as.numeric(dt_year) -1)),"/",substring(dt_year, 3,4)))
+# 
+# animal_dt <- 
+#   animal_dt %>% 
+#   mutate(dt_year = factor(dt_year, unique(animal_dt$dt_year)))
 
 
 
 animal_dt %>% 
-  group_by(dt_year,animal) %>% 
+  group_by(fyear,animal) %>% 
   summarise(total=n()) %>%
-  arrange(dt_year, animal) %>% 
+  arrange(fyear, animal) %>% 
   ungroup() %>% 
   #mutate(animal = factor(animal, animal)) %>% 
-  ggplot(aes(y=total, x=dt_year, fill=animal))+
+  ggplot(aes(y=total, x=fyear, fill=animal))+
   geom_col(alpha=0.5, col = "black", position = position_stack(reverse = TRUE)) +
   scale_fill_manual(values = primary.colors(15, steps = 3, no.white = TRUE))+
   scale_x_discrete(guide = guide_axis(n.dodge = 2))

@@ -1,5 +1,5 @@
 ---
-title: "Risk Stratification Tools"
+title: "Analytical test"
 subtitle: "Deputy Director Specialist Analytics Interview"  
 author: 
   - "Chris Mainey"
@@ -88,3 +88,58 @@ Presentation on github with references and code, share afterwards
 
 
 ---
+# Overview
+
+.pull-left[
+
+## What? When? 
+
++ Dataset from WMFS detailing animal
++ No data dictionary, but clear date, District & Ward, free-text description
++ Dates 02-04-2013 - 31/03/2023 (10 years, likely fiscal years)
++ Numbers are really too small to distinguish from chance
++ Largest numbers seen in :
+
+
+.pull-right[
+
+]
+
+
+
+---
+# Regional distribution
+
+.pull-left[
+## Population weighting
++ Birmingham has >3x population of other regions, so highest numbers
++ Proportions are in middle, with COventry lowest
++ Cat highest in all, then dog and bird
+]
+
+.pull-right[
+
+]
+---
+
+# Timeseries problem
+
++ When decomposed, clear trend and seasonality
+
+---
+# NLP / text mining
+
++ Can use text to work out much of animal distribution.
++ Tokenised to words using `idytext`, stopwords removed.
++ Lots of alternatives (e.g. dog, puppy, terrier etc.) - mapped with function.
++ Majority is cats
++ Majority mention some for of trapped / 
++ Peak in 2022?
+
+---
+# What else?
+
++ No explicit question. What are the questions?
++ Times in the data:
+  + Time fo day analysis
+  + Is time associated it particular types of rescue/animal?

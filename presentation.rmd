@@ -58,7 +58,7 @@ class: title-slide
 
 <br><br>
 
-### Head Data Scientis Interview
+### Head Data Scientist Interview
 
 
 <br><br><br><br><br>
@@ -88,38 +88,63 @@ Presentation on github with references and code, share afterwards
 
 
 ---
-# Overview
 
 .pull-left[
+# Overview
 
 ## What? When? 
-
-+ Dataset from WMFS detailing animal
++ Dataset from WMFS detailing animal rescures
 + No data dictionary, but clear date, District & Ward, free-text description
-+ Dates 02-04-2013 - 31/03/2023 (10 years, likely fiscal years)
-+ Numbers are really too small to distinguish from chance
-+ Largest numbers seen in :
++ Dates: 02/04/2013 - 31/03/2023 (10 years, likely fiscal years)
++ Numbers are too small to distinguish from chance
 
+<br>
++ Largest numbers seen in: Birmingham
++ Reasonable to assume animal population relates to human population
++ Weighted with ONS population projections
++ Coventry lowest, Birmingham average.
++ Dudley highest
+
+
+]
 
 .pull-right[
+<centre>
+<img src="./outputs/district_fyear.png" alt="stacked line chart for Coventry, Solihull, Birmingham,
+Walsall, Sandwell, Wolverhampton showing increases in pet rescues over 10 years 2013 / 2023"  class="center"/>
+<br> 
+
+<img src="./outputs/raw_vs_weighted.png" alt="stacked line chart for Coventry, Solihull, Birmingham,
+Walsall, Sandwell, Wolverhampton showing increases in pet rescues over 10 years 2013 / 2023"  class="center"/>
+</centre>
+
 
 ]
 
 
 
 ---
-# Regional distribution
 
 .pull-left[
-## Population weighting
-+ Birmingham has >3x population of other regions, so highest numbers
-+ Proportions are in middle, with COventry lowest
-+ Cat highest in all, then dog and bird
+# Regional distribution
+<br><br><br>
+<centre>
+<img src="./outputs/ward_map2.png" alt="stacked line chart for Coventry, Solihull, Birmingham,
+Walsall, Sandwell, Wolverhampton showing increases in pet rescues over 10 years 2013 / 2023"  class="center"/>
+
 ]
 
 .pull-right[
+<centre>
+<img src="./outputs/anim_district_year2.gif" alt="stacked line chart for Coventry, Solihull, Birmingham,
+Walsall, Sandwell, Wolverhampton showing increases in pet rescues over 10 years 2013 / 2023" height="300" class="center"/>
+<br>
 
+<img src="./outputs/anim_wards_year2.gif" alt="stacked line chart for Coventry, Solihull, Birmingham,
+Walsall, Sandwell, Wolverhampton showing increases in pet rescues over 10 years 2013 / 2023"  height="300" class="center"/>
+</centre>
 ]
+
 ---
 
 # Timeseries problem

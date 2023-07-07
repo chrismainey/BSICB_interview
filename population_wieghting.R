@@ -77,17 +77,17 @@ total_weighted %>%
   geom_col(aes(y=value), col=1, alpha=0.7, linewidth = 0.5)+
   #geom_col(aes(y=Rescues), position =  position_nudge(x = 0.3),  width = 0.5)+
   #scale_y_continuous(sec.axis = ~ .)+
-  scale_fill_viridis_d()+
+  scale_fill_viridis_d(alpha=0.7)+
   facet_wrap(~Measure, scales = "free_y")+
   #scale_x_discrete(guide = guide_axis(n.dodge = 2))+
   theme(legend.position = "none",
-        axis.text.x = element_text(size = 12, angle=45, hjust = 1),
+        axis.text.x = element_text(size = 10, angle=45, hjust = 1),
         axis.title = element_blank())
 
 
 
-ggsave("./outputs/raw_vs_weighted.png",  device = png, type = "cairo", dpi = 300,
-       width = 4, height = 3, units = "in")
+ggsave("./outputs/raw_vs_weighted.png",  device = png, type = "cairo", dpi = 96,
+       height = 470, width = 758, unit = "px", scale = 1)
 
 animal_dt %>% 
   distinct(year)

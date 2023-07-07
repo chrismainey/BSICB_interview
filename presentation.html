@@ -1,10 +1,10 @@
 <!DOCTYPE html>
 <html lang="" xml:lang="">
   <head>
-    <title>Risk Stratification Tools</title>
+    <title>Analytical test</title>
     <meta charset="utf-8" />
     <meta name="author" content="Chris Mainey" />
-    <meta name="date" content="2023-06-28" />
+    <meta name="date" content="2023-07-07" />
     <script src="presentation_files/header-attrs/header-attrs.js"></script>
     <link rel="stylesheet" href="theme.css" type="text/css" />
   </head>
@@ -21,7 +21,7 @@ class: title-slide
 
 &lt;br&gt;&lt;br&gt;
 
-### Head Data Scientis Interview
+### Head Data Scientist Interview
 
 
 &lt;br&gt;&lt;br&gt;&lt;br&gt;&lt;br&gt;&lt;br&gt;
@@ -51,6 +51,86 @@ Presentation on github with references and code, share afterwards
 
 
 ---
+
+.pull-left[
+# Overview
+
+## What? When? 
++ Dataset from WMFS detailing animal rescures
++ No data dictionary, but clear date, District &amp; Ward, free-text description
++ Dates: 02/04/2013 - 31/03/2023 (10 years, likely fiscal years)
++ Numbers are too small to distinguish from chance
+
+&lt;br&gt;
++ Largest numbers seen in: Birmingham
++ Reasonable to assume animal population relates to human population
++ Weighted with ONS population projections
++ Coventry lowest, Birmingham average.
++ Dudley highest
+
+
+]
+
+.pull-right[
+&lt;centre&gt;
+&lt;img src="./outputs/district_fyear.png" alt="stacked line chart for Coventry, Solihull, Birmingham,
+Walsall, Sandwell, Wolverhampton showing increases in pet rescues over 10 years 2013 / 2023"  class="center"/&gt;
+&lt;br&gt; 
+
+&lt;img src="./outputs/raw_vs_weighted.png" alt="stacked line chart for Coventry, Solihull, Birmingham,
+Walsall, Sandwell, Wolverhampton showing increases in pet rescues over 10 years 2013 / 2023"  class="center"/&gt;
+&lt;/centre&gt;
+
+
+]
+
+
+
+---
+
+.pull-left[
+# Regional distribution
+&lt;br&gt;&lt;br&gt;&lt;br&gt;
+&lt;centre&gt;
+&lt;img src="./outputs/ward_map2.png" alt="stacked line chart for Coventry, Solihull, Birmingham,
+Walsall, Sandwell, Wolverhampton showing increases in pet rescues over 10 years 2013 / 2023"  class="center"/&gt;
+
+]
+
+.pull-right[
+&lt;centre&gt;
+&lt;img src="./outputs/anim_district_year2.gif" alt="stacked line chart for Coventry, Solihull, Birmingham,
+Walsall, Sandwell, Wolverhampton showing increases in pet rescues over 10 years 2013 / 2023" height="300" class="center"/&gt;
+&lt;br&gt;
+
+&lt;img src="./outputs/anim_wards_year2.gif" alt="stacked line chart for Coventry, Solihull, Birmingham,
+Walsall, Sandwell, Wolverhampton showing increases in pet rescues over 10 years 2013 / 2023"  height="300" class="center"/&gt;
+&lt;/centre&gt;
+]
+
+---
+
+# Timeseries problem
+
++ When decomposed, clear trend and seasonality
+
+---
+# NLP / text mining
+
++ Can use text to work out much of animal distribution.
++ Tokenised to words using `idytext`, stopwords removed.
++ Lots of alternatives (e.g. dog, puppy, terrier etc.) - mapped with function.
++ Majority is cats
++ Majority mention some for of trapped / 
++ Peak in 2022?
+
+---
+# What else?
+
++ No explicit question. What are the questions?
++ Times in the data:
+  + Time fo day analysis
+  + Is time associated it particular types of rescue/animal?
     </textarea>
 <style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
 <script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>

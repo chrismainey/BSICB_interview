@@ -20,15 +20,15 @@ showtext::showtext_auto()
 theme_set(
   theme_classic(base_family = "Open Sans") +
     theme(
-      text = element_text(family="Open Sans", size = 14),
+      text = element_text(family="Open Sans", size = 12),
       axis.title = element_text(family="Open Sans"),
-      axis.text = element_text(family="Open Sans", size = 14),
+      axis.text = element_text(family="Open Sans", size = 12),
       panel.background = element_blank(),
       panel.grid = element_blank(),
       axis.line = element_line(colour ="#425563"),
       strip.background = element_rect(fill = "#c8cfd3"),
-      plot.title = element_text(face = "bold", size = 18),
-      plot.subtitle = element_text(face = "italic", size = 14),
+      plot.title = element_text(face = "bold", size = 16),
+      plot.subtitle = element_text(face = "italic", size = 13),
       strip.text = element_text(size = 14)
     )
 )
@@ -223,9 +223,9 @@ animal_rf <-
 
 animal_rolling_plot <-
   ggplot(animal_wm_ts, aes(x= as.Date(dt_month)))+
-  geom_line(aes(y=`4-MA`), linewidth=0.7)+
-  geom_line(aes(y=.mean, col=.model), data=animal_rf, linewidth=0.8, alpha=0.6)+
-  geom_smooth(aes(y=.mean, col=.model), method="lm", data=animal_rf, linewidth=0.7
+  geom_line(aes(y=`4-MA`), linewidth=1)+
+  geom_line(aes(y=.mean, col=.model), data=animal_rf, linewidth=1, alpha=0.6)+
+  geom_smooth(aes(y=.mean, col=.model), method="lm", data=animal_rf, linewidth=1
               , se=FALSE, linetype="dashed", alpha=0.6)+
   geom_vline(xintercept = as.Date("01/04/2023", format = "%d/%m/%Y"), col = "red"
              , linewidth = 0.7, linetype="dashed")+
@@ -246,10 +246,10 @@ animal_rolling_plot <-
        , subtitle = "Four-month rolling average forecast, based on Apr-13 - Mar-23"
        , y = "Average Animal Rescues")+
   theme(legend.position = "bottom",
-        axis.text.x = element_text(angle=45, size = 12, colour = "#595959"
+        axis.text.x = element_text(angle=45, size = 9, colour = "#595959"
                                    , hjust = 1),
         plot.subtitle = element_text(face="italic", size = 12),
-        legend.margin=margin(t=0, r=0, b=0, l=0, unit="cm"),
+        legend.margin=margin(t=0, r=0, b=0.2, l=0, unit="cm"),
         legend.key.height=unit(0, "cm"),      
         plot.margin = unit(c(1,0.5,0,0.5), "lines")
   )
@@ -259,8 +259,8 @@ animal_rolling_plot
 
 #ggsave("./outputs/four_month_rolling_forecast.png", )
 
-ggsave("./outputs/four_month_rolling_forecast.png", animal_rolling_plot, device = png, type = "cairo", dpi = 300,
-       width = 4, height = 3, units = "in")
+ggsave("./outputs/four_month_rolling_forecast.png", animal_rolling_plot, device = png, type = "cairo", dpi = 96,
+       height = 470, width = 758, unit = "px", scale = 1)
 
 
 
@@ -275,6 +275,33 @@ ggplot(animal_dt, aes(x=dt))+
 
 
 
+# fyear district
+district_fyear<-
+animal_dt %>% 
+  group_by(fyear, District) %>% 
+  summarise(Rescues = n()) %>% 
+  ggplot(aes(y=Rescues, x=fyear, col=District, fill=District, group=District))+
+  #geom_line(linewidth = 1) +
+  geom_area()+
+  scale_colour_viridis_d(aesthetics = c("color", "fill"), alpha = 0.7)+
+  scale_x_discrete(guide = guide_axis(n.dodge = 2))+
+  # guides(fill=guide_legend(nrow = 1,byrow=TRUE,  keywidth = 0.25),
+  #        colour=guide_legend(nrow = 1, byrow=TRUE, keywidth = 0.25))+
+  labs(y="Rescues",
+       title = "Animal Rescues by fiscal year and district")+
+  theme(legend.position = "bottom",
+        # legend.text = element_text(size=12),
+        # legend.title = element_text(size=13, face="bold"),
+        # axis.text.x = element_text(size = 12),
+         axis.title.x = element_blank()
+        # axis.title.y = element_text(size = 13)
+        #, legend.key = element_rect(lindewidth = 0.25)
+        )
+
+district_fyear
+
+ggsave("./outputs/district_fyear.png", district_fyear, dpi = 96,
+        height = 470, width = 758, unit = "px", scale = 1)
 
 
 
@@ -282,6 +309,4 @@ ggplot(animal_dt, aes(x=dt))+
 
 
 
-
-
-# Tidytext tokeise most common words for pets
+# Absolute numbers

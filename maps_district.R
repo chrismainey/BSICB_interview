@@ -82,7 +82,7 @@ yearsplt_district<- ggplot() +
   scale_fill_viridis_c(alpha = 0.5, na.value = 0)+
   transition_states(fyear, transition_length = 0, state_length = 1) +
   #facet_wrap(~fyear)+
-  labs(title ="Animal Rescuse by District, for {next_state}"
+  labs(title ="Animal Rescues by District, for {next_state}"
        , subtitle = "Data Source: https://www.cityobservatory.birmingham.gov.uk/@west-midlands-fire-service/animal-rescues") + 
   coord_sf()+
   theme_void()+

@@ -128,7 +128,7 @@ map1<- ggplot() +
   
   scale_fill_viridis_c(alpha=0.5)+
   #transition_time(year) +
-  labs(title ="Animal Rescuse by Ward, for fiscal years 2013/14 - 2022/23"
+  labs(title ="Animal Rescues by Ward, for fiscal years 2013/14 - 2022/23"
             , subtitle = "Data Source: https://www.cityobservatory.birmingham.gov.uk/@west-midlands-fire-service/animal-rescues") + 
   coord_sf()+
   theme_map()
@@ -165,7 +165,7 @@ yearsplt<- ggplot() +
   scale_fill_viridis_c(alpha = 0.5, na.value = 0)+
   transition_states(fyear, transition_length = 0, state_length = 1) +
   #facet_wrap(~year)+
-  labs(title ="Animal Rescuse by Ward, for {next_state}"
+  labs(title ="Animal Rescues by Ward, for {next_state}"
        , subtitle = "Data Source: https://www.cityobservatory.birmingham.gov.uk/@west-midlands-fire-service/animal-rescues") + 
   coord_sf()+
   theme_void()+
@@ -187,3 +187,51 @@ anim_save("./outputs/anim_wards_year.gif")
 
 
 
+# Need to trim white space off image and gif
+
+
+
+
+# blank space 
+
+image <- image_read('./outputs/anim_district_year.gif')
+
+# Printing the image
+print(image, info = FALSE)
+
+image_info(image)
+
+r3<-image_crop(image = image, geometry = "480x318+0+81")
+print(r3, info = FALSE)
+
+image_write(r3, path = './outputs/anim_district_year2.gif')
+
+# blank space 
+# Next
+
+image <- image_read('./outputs/anim_wards_year.gif')
+
+# Printing the image
+print(image, info = FALSE)
+
+image_info(image)
+
+r4<-image_crop(image = image, geometry = "480x318+0+81")
+print(r4, info = FALSE)
+
+image_write(r4, path = './outputs/anim_wards_year2.gif')
+
+# Next
+
+
+image <- image_read('./outputs/ward_map.png')
+
+# Printing the image
+print(image, info = FALSE)
+
+image_info(image)
+
+r5<-image_crop(image = image, geometry = "716x471+21+0")
+print(r5, info = FALSE)
+
+image_write(r5, path = './outputs/ward_map2.png')

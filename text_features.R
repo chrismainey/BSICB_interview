@@ -1,6 +1,9 @@
 library(tidytext)
 library(RColorBrewer)
 library(wordcloud)
+library(fBasics)
+
+library(magick)
 
 
 animal_txt <-
@@ -35,7 +38,7 @@ tokens <-
   animal_txt %>% 
   count(word, sort = TRUE)
 
-pal <- RColorBrewer::brewer.pal(10,"Set3")
+#pal <- RColorBrewer::brewer.pal(10,"Set3")
 
 pal <- fBasics::qualiPalette(30, name = "Dark2")
 
@@ -46,11 +49,8 @@ tokens  %>%
   with(wordcloud(word, n, random.order = FALSE, max.words = 80, colors=pal))
 dev.off()
 
+
 # blank space around it is a pain.  Use magick to load again and crop
-
-# install.packages("magick")
-library(magick)
-
 # Reading a PNG
 image <- image_read('./outputs/animal_words.png')
 
@@ -59,12 +59,13 @@ print(image, info = FALSE)
 
 image_info(image)
 
-r<-image_crop(image = image, geometry = "2300x250")
 r<-image_crop(image = image, geometry = "280x280+100+100")
 print(r, info = FALSE)
 
 image_write(r, path = './outputs/animal_words2.png')
 
+
+# Other plots
 animal_txt  %>%
   count(word, sort = TRUE) %>% 
   filter(n < 20, n >5) %>%
@@ -75,10 +76,64 @@ animal_txt  %>%
 
 
 # 'Cat stuck' is most common by a long-shot
-animal_txt %>% 
+z<- animal_txt %>% 
   bind_tf_idf(word, id, n) %>% 
   arrange(tf_idf) %>% 
   print(n = 2000)
+
+
+
+# try this as bigrams too:
+animal_txt_bi <-
+  animal_dt %>%
+  mutate(id = row_number()) %>% 
+  unnest_tokens(bigram, Incident.Detail, token = "ngrams", n= 2) %>%
+  filter(!is.na(bigram)) %>% 
+  count(id, bigram, sort = TRUE)
+
+# split and remove if either are stop words
+bigrams_separated <- animal_txt_bi %>%
+  separate(bigram, c("word1", "word2"), sep = " ")
+
+bigrams_filtered <- bigrams_separated %>%
+  filter(!word1 %in% stop_words$word) %>%
+  filter(!word2 %in% stop_words$word) %>% 
+  filter(!str_detect(word1, "^[0-9]")) %>%
+  filter(!str_detect(word2, "^[0-9]"))
+  
+
+# new bigram counts:
+bigram_counts <- bigrams_filtered %>% 
+  count(word1, word2, sort = TRUE)
+
+bigram_counts <-
+  bigram_counts %>% 
+  mutate(bigram = paste(word1,word2))
+
+pal2 <- fBasics::qualiPalette(18, name = "Dark2")
+
+# plot the 80 most common words
+set.seed(123)
+CairoPNG("./outputs/animal_bigrams.png")
+bigram_counts  %>% 
+  with(wordcloud(bigram, n, random.order = FALSE, max.words = 40, colors=pal2))
+dev.off()
+
+# blank space 
+
+image <- image_read('./outputs/animal_bigrams.png')
+
+# Printing the image
+print(image, info = FALSE)
+
+image_info(image)
+
+r2<-image_crop(image = image, geometry = "300x280+90+100")
+print(r2, info = FALSE)
+
+image_write(r2, path = './outputs/animal_bigrams2.png')
+
+
 
 
 # dog, pigeon, bird, cat, puppy, kitten, horse, deer, jack russell, fox

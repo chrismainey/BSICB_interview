@@ -76,7 +76,7 @@ total_weighted %>%
   ggplot(aes(x=District, fill = District, group=Measure))+
   geom_col(aes(y=value), col=1, alpha=0.7, linewidth = 0.5)+
   #geom_col(aes(y=Rescues), position =  position_nudge(x = 0.3),  width = 0.5)+
-  #scale_y_continuous(sec.axis = ~ .)+
+  scale_y_continuous(n.breaks = 6)+
   scale_fill_viridis_d(alpha=0.7)+
   facet_wrap(~Measure, scales = "free_y")+
   #scale_x_discrete(guide = guide_axis(n.dodge = 2))+

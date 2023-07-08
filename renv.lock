@@ -537,6 +537,27 @@
       ],
       "Hash": "d59f3b464e8da1aef82dc04b588b8dfb"
     },
+    "fBasics": {
+      "Package": "fBasics",
+      "Version": "4022.94",
+      "Source": "Repository",
+      "Repository": "CRAN",
+      "Requirements": [
+        "MASS",
+        "R",
+        "grDevices",
+        "graphics",
+        "gss",
+        "methods",
+        "spatial",
+        "stabledist",
+        "stats",
+        "timeDate",
+        "timeSeries",
+        "utils"
+      ],
+      "Hash": "6995d354e6cfe1bfd3fef9c71f1ec894"
+    },
     "fable": {
       "Package": "fable",
       "Version": "0.3.3",
@@ -814,6 +835,17 @@
       ],
       "Hash": "d6db1667059d027da730decdc214b959"
     },
+    "gss": {
+      "Package": "gss",
+      "Version": "2.2-5",
+      "Source": "Repository",
+      "Repository": "CRAN",
+      "Requirements": [
+        "R",
+        "stats"
+      ],
+      "Hash": "a6605fbfd1d6be64dcc7ebd5ac888f0a"
+    },
     "gtable": {
       "Package": "gtable",
       "Version": "0.3.3",
@@ -1086,6 +1118,18 @@
         "timechange"
       ],
       "Hash": "e25f18436e3efd42c7c590a1c4c15390"
+    },
+    "magick": {
+      "Package": "magick",
+      "Version": "2.7.4",
+      "Source": "Repository",
+      "Repository": "CRAN",
+      "Requirements": [
+        "Rcpp",
+        "curl",
+        "magrittr"
+      ],
+      "Hash": "92dd08195d2270e188dcac8d4b219e84"
     },
     "magrittr": {
       "Package": "magrittr",
@@ -1652,6 +1696,30 @@
       ],
       "Hash": "2551981e6f85d59c81652bf654d6c3ca"
     },
+    "spatial": {
+      "Package": "spatial",
+      "Version": "7.3-16",
+      "Source": "Repository",
+      "Repository": "CRAN",
+      "Requirements": [
+        "R",
+        "graphics",
+        "stats",
+        "utils"
+      ],
+      "Hash": "1f7d528460600aeab2c2fcc5b3f5bab6"
+    },
+    "stabledist": {
+      "Package": "stabledist",
+      "Version": "0.7-1",
+      "Source": "Repository",
+      "Repository": "CRAN",
+      "Requirements": [
+        "R",
+        "stats"
+      ],
+      "Hash": "dfd9740f06248fb6721d38df2e14ed7b"
+    },
     "stringi": {
       "Package": "stringi",
       "Version": "1.7.12",
@@ -1839,6 +1907,36 @@
         "xml2"
       ],
       "Hash": "c328568cd14ea89a83bd4ca7f54ae07e"
+    },
+    "timeDate": {
+      "Package": "timeDate",
+      "Version": "4022.108",
+      "Source": "Repository",
+      "Repository": "CRAN",
+      "Requirements": [
+        "R",
+        "graphics",
+        "methods",
+        "stats",
+        "utils"
+      ],
+      "Hash": "3f7918d2b36c17ffe07cddba6458453e"
+    },
+    "timeSeries": {
+      "Package": "timeSeries",
+      "Version": "4030.106",
+      "Source": "Repository",
+      "Repository": "CRAN",
+      "Requirements": [
+        "R",
+        "grDevices",
+        "graphics",
+        "methods",
+        "stats",
+        "timeDate",
+        "utils"
+      ],
+      "Hash": "c446e6e21cbec2a095c9009e94b2d582"
     },
     "timechange": {
       "Package": "timechange",

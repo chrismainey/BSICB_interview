@@ -6,7 +6,7 @@ library(ggplot2)
 # https://github.com/aschinchon/general-2D-map
 
 #ggplot theme blank canvas
-opt = theme(legend.position  = "none",
+opt <- theme(legend.position  = "none",
             panel.background = element_rect(fill="#FFFFFF"),
             axis.ticks       = element_blank(),
             panel.grid       = element_blank(),
@@ -31,19 +31,19 @@ cppFunction('DataFrame createTrajectory(int n, double x0, double y0,
             ')
 
 #cp#define constants
-a=1.24
-b=-1.25
-c=-1.81
-d=-1.91
+a<-1.24
+b<-1.25
+c<-1.81
+d<-1.91
 
 
-a=1.5
-b=-1.3
-c=-1.1
-d=-1.41
+a<-1.5
+b<-1.3
+c<-1.1
+d<-1.41
 
 #make dataframe and plot the points
-df=createTrajectory(10000000, 0, 0, a, b, c, d)
+df<-createTrajectory(10000000, 0, 0, a, b, c, d)
 
 a <- ggplot(df, aes(x, y)) + geom_point(color="#0072CE", shape=46, alpha=.01) + opt
 

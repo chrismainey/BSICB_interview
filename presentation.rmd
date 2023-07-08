@@ -93,17 +93,17 @@ Presentation on github with references and code, share afterwards
 # Overview
 
 ## What? When? 
-+ Dataset from WMFS detailing animal rescures
++ Dataset from WMFS detailing animal rescues
 + No data dictionary, but clear date, District & Ward, free-text description
 + Dates: 02/04/2013 - 31/03/2023 (10 years, likely fiscal years)
-+ Numbers are too small to distinguish from chance
++ Numbers are too small to distinguish differences at ward level over time
 
 <br>
 + Largest numbers seen in: Birmingham
 + Reasonable to assume animal population relates to human population
-+ Weighted with ONS population projections
-+ Coventry lowest, Birmingham average.
-+ Dudley highest
++ Weighted with ONS population projections:
+  + Coventry lowest, Birmingham average
+  + Dudley highest
 
 
 ]
@@ -114,8 +114,8 @@ Presentation on github with references and code, share afterwards
 Walsall, Sandwell, Wolverhampton showing increases in pet rescues over 10 years 2013 / 2023"  class="center"/>
 <br> 
 
-<img src="./outputs/raw_vs_weighted.png" alt="stacked line chart for Coventry, Solihull, Birmingham,
-Walsall, Sandwell, Wolverhampton showing increases in pet rescues over 10 years 2013 / 2023"  class="center"/>
+<img src="./outputs/raw_vs_weighted.png" alt="Bar charts comparing animal rescues per 1000 population in Coventry,
+Solihull, Birmingham, Walsall, Sandwell, Wolverhampton against absolute numbers. Birminghas higher numbers but is average in proportion to it's population."  class="center"/>
 </centre>
 
 
@@ -127,44 +127,91 @@ Walsall, Sandwell, Wolverhampton showing increases in pet rescues over 10 years 
 
 .pull-left[
 # Regional distribution
-<br><br><br>
 <centre>
-<img src="./outputs/ward_map2.png" alt="stacked line chart for Coventry, Solihull, Birmingham,
-Walsall, Sandwell, Wolverhampton showing increases in pet rescues over 10 years 2013 / 2023"  class="center"/>
+<img src="./outputs/ward_map2.png" alt="Map of wards in Coventry, Solihull, Birmingham,
+Walsall, Sandwell, Wolverhampton showing total number of animal rescues over fiscal year 2013 - 2023"  class="center"/>
+
++ Ladywood - Birmingham (25)
++ St. Michael's - Coventry (18)
++ Including Boardsley Green, Nechells, Perry Bar, Soho & Jewellery quarter, Aston, Bartley Green
++ Sutton Trinity - Birmingham(17), Brierly Hill - Dudley(15)
+
+]
+--
+.pull-right[
+<centre>
+<img src="./outputs/anim_district_year2.gif" alt="Animated map of districts in Coventry, Solihull, Birmingham,
+Walsall, Sandwell, Wolverhampton showing number of animal rescues per fiscal year 2013 - 2023" height="300" class="center"/>
+<br>
+
+<img src="./outputs/anim_wards_year2.gif" alt="Animated map of wards in Coventry, Solihull, Birmingham,
+Walsall, Sandwell, Wolverhampton showing number of animal rescues per fiscal year 2013 - 2023"  height="300" class="center"/>
+</centre>
+]
+
+---
+.pull-left[
+# Timeseries problem
+
+
++ When decomposed: clear increasing trend and annual seasonality
++ Examined as both monthly and rolling periods
++ Best performance with exponential smoothing and ARIMA
++ 
+
+<centre>
+<img src="./outputs/four_month_rolling_forecast.png" alt="Seasonal timeseries component for animal rescue data in West Midlands, showing trend annual seasonality and error"  height="300" class="center"/>
+</centre>
 
 ]
 
 .pull-right[
 <centre>
-<img src="./outputs/anim_district_year2.gif" alt="stacked line chart for Coventry, Solihull, Birmingham,
-Walsall, Sandwell, Wolverhampton showing increases in pet rescues over 10 years 2013 / 2023" height="300" class="center"/>
-<br>
-
-<img src="./outputs/anim_wards_year2.gif" alt="stacked line chart for Coventry, Solihull, Birmingham,
-Walsall, Sandwell, Wolverhampton showing increases in pet rescues over 10 years 2013 / 2023"  height="300" class="center"/>
+<img src="./outputs/time_series_components.png" alt="Seasonal timeseries component for animal rescue data in West Midlands, showing trend annual seasonality and error"  height="600" class="center"/>
 </centre>
 ]
 
 ---
 
-# Timeseries problem
 
-+ When decomposed, clear trend and seasonality
-
----
+.pull-left[
 # NLP / text mining
 
 + Can use text to work out much of animal distribution.
-+ Tokenised to words using `idytext`, stopwords removed.
++ Tokenised to words using `tidytext`, stopwords removed.
 + Lots of alternatives (e.g. dog, puppy, terrier etc.) - mapped with function.
-+ Majority is cats
-+ Majority mention some for of trapped / 
-+ Peak in 2022?
+
+<p float="left">
+<img src="./outputs/animal_words2.png" alt="Word cloud of from animal rescue text, showing 'cat' and stuck' to be most frequent"  width="250" height = "250"/>
+<img src="./outputs/animal_bigrams2.png" alt="Word cloud of bi-grams from animal rescue text, showing 'cat stuck' to be most frequent"  width="250" height = "250"/>
+</p>
+
+
+<!-- <img src="./outputs/animal_words2.png" alt="Word cloud of from animal rescue text, showing 'cat' and stuck' to be most frequent"  width="100" class="left"/><img src="./outputs/animal_bigrams2.png" alt="Word cloud of bi-grams from animal rescue text, showing 'cat stuck' to be most frequent"  width="100" class="right"/> -->
+
+]
+
+.pull-right[
+
+<centre>
+<img src="./outputs/animals_by_region.png" alt="Bar chart showing animal type by region for animal rescues in the West Midlands, showing 'cat' to be most common, but significantly so in Birmingham"  height="600" class="center"/>
+</centre>
+
+]
 
 ---
 # What else?
 
 + No explicit question. What are the questions?
++ Local (District) forecasts - help planning of resources
 + Times in the data:
-  + Time fo day analysis
+  + Time of day analysis
+  + Time taken for rescues
++ Compare to other call out data
+  + Relative time taken
+  + Effects on availability / opportunity cost
++ Augment future data capture:
+  + Record animal distinctly
+  + Equipment needed
+  + Time taken
   + Is time associated it particular types of rescue/animal?

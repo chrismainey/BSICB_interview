@@ -35,14 +35,14 @@ typeof(shape_WM)
 typeof(map_set)
 
 #join on ward?
-# Need to remove the work 'Ward' to match ONS shape file.
+# Need to remove the word 'Ward' to match ONS shape file.
 # WMFAS said they don't know when meta data is changed over as they rely on IT to do it.
 # I've made a guess at 2018 here, after a lot of manual checking and back and forth I've cleaned up below.
 a<- animal_dt %>% 
   filter(dt >= "2018-04-01") %>% 
-  group_by(District, Ward, fyear) %>% 
-  mutate(Rescues = n(),
-         Ward = str_remove(Ward, " Ward")) %>% 
+  mutate(Ward = str_remove(Ward, " Ward")) %>% 
+  # group_by(District, Ward, fyear, geometry) %>% 
+  # summarise(Rescues = n()) %>% 
   left_join(shape_WM, c("Ward" = "WD19NM"))
 
 # Difference around including . in some St. names between 11 and 19.
@@ -67,17 +67,30 @@ animal_dt <-
 
 b<- animal_dt %>% 
   filter(dt < "2018-04-01") %>% 
-  group_by(District, Ward, fyear) %>% 
-  mutate(Rescues = n(),
-         Ward = str_trim((str_remove(Ward, " Ward")))) %>% 
+  mutate(Ward = str_remove(Ward, " Ward")) %>% 
+  # group_by(District, Ward, fyear) %>% 
+  #summarise(Rescues = n()) %>%
   left_join(shape_WM_11, c("Ward" = "wd11nm"))
 
 
 # Combine two parts together
 map_set <- 
-  select(a, Incdate, fyear, District, Ward, Incident.Detail, dt, Rescues, geometry) %>% 
-  bind_rows(select(b, Incdate, fyear, District, Ward, Incident.Detail, dt, Rescues, geometry))
+  select(a, Incdate, fyear, District, Ward, Incident.Detail, dt, geometry) %>% 
+  bind_rows(select(b, Incdate, fyear, District, Ward, Incident.Detail, dt, geometry))
 
+# UPDATE: where polygon and multiploygon, chose multipolygon
+geomtry_join_temp <-
+  map_set %>% 
+  group_by(District, Ward, geometry) %>% 
+  summarise(ct = n()) %>% 
+  #mutate(as.character(unlist(geometry)))
+  filter(ct > 1 & st_geometry_type(geometry) == "MULTIPOLYGON")
+
+map_set <- 
+  map_set %>% 
+  left_join(geomtry_join_temp, by=c("District", "Ward")) %>% 
+  mutate(geometry = st_sfc(ifelse(st_is_empty(geometry.y), st_cast(geometry.x, "MULTIPOLYGON"), geometry.y))) %>% 
+  select(-geometry.x, -geometry.y, -ct)
 
 theme_map <-function(){
   theme_void()+
@@ -96,14 +109,17 @@ library(gganimate)
 library(transformr)
 
 
+# Use the maps set for aggregates of wards because of the name cleaning and reconcilliation.
 map_set_agg <- 
   map_set %>% 
   group_by(District, Ward, geometry) %>% 
-  summarise(Rescues = sum(Rescues))
+  summarise(Rescues = n())
 
 map_set_agg %>% 
-  summarise(max(Rescues))
+  filter(Rescues >9) %>% 
+  arrange(desc(Rescues))
 
+  
 
 # get right shape first
 map1<- ggplot() + 
@@ -141,15 +157,21 @@ ragg::agg_png("./outputs/ward_map.png" , width = 758, height = 471, units = "px"
 map1
 dev.off()
 
-# get right shape first
-yearsplt<- ggplot() + 
+# By year
+map_set_agg_fyear <- 
+  map_set %>% 
+  group_by(District, Ward, fyear, geometry) %>% 
+  summarise(Rescues = n())
+
+yearsplt<- 
+  ggplot() + 
   geom_sf(data = shape_WM, aes(geometry = geometry)
           , size = 1.5
           , color = "black"
           #, fill = "cyan1"
           , 
   ) + 
-  geom_sf(data = map_set, aes(geometry = geometry, fill= Rescues)
+  geom_sf(data = map_set_agg_fyear, aes(geometry = geometry, fill= Rescues)
           , size = 1.5
           , color = "black"
           #, fill = "cyan1"

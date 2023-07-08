@@ -137,7 +137,11 @@ dcmp <- animal_wm_ts %>%
 
 components(dcmp)
 
-components(dcmp) %>%  autoplot()
+cmpt_plot <- components(dcmp) %>%  autoplot() + labs(x="Date")
+
+
+ggsave("./outputs/time_series_components.png", cmpt_plot, device = png, type = "cairo", dpi = 96,
+       height = 797, width = 758, unit = "px", scale = 1.3)
 
 
 # Visulaise effects of rolling average
@@ -305,6 +309,14 @@ ggsave("./outputs/district_fyear.png", district_fyear, dpi = 96,
 
 
 
+
+# Top wards
+
+animal_dt %>% 
+  group_by(District, Ward) %>% 
+  summarise(Rescues = n()) %>% 
+  arrange(desc(Rescues))
+  
 
 
 

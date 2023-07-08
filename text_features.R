@@ -76,12 +76,13 @@ animal_txt  %>%
 
 
 # 'Cat stuck' is most common by a long-shot
+# tf-IDF. Not very helpful
 z<- animal_txt %>% 
   bind_tf_idf(word, id, n) %>% 
   arrange(tf_idf) %>% 
   print(n = 2000)
 
-
+z
 
 # try this as bigrams too:
 animal_txt_bi <-
@@ -221,6 +222,7 @@ library(colorRamps)
 animal_label <-
   animal_dt %>% 
   group_by(animal) %>% 
+  filter(!is.na(animal)) %>% 
   summarise(total=n()) %>%
   arrange(desc(total)) %>% 
   pull(animal)
@@ -240,20 +242,30 @@ animal_dt %>%
   scale_x_discrete(guide = guide_axis(n.dodge = 2))+
   theme(legend.position = "none")
 
-
+animals_region <-
 animal_dt %>% 
-  filter(District != "Birmingham") %>% 
+  #filter(District != "Birmingham") %>% 
   group_by(District, animal) %>% 
   summarise(total=n()) %>%
   arrange(desc(total)) %>% 
   #mutate(animal = factor(animal, animal)) %>% 
   ggplot(aes(y=total, x=animal, fill=animal))+
   geom_col(alpha=0.5, col = "black")+
-  scale_fill_manual(values = primary.colors(15, steps = 3, no.white = TRUE))+
-  scale_x_discrete(guide = guide_axis(n.dodge = 2))+
-  facet_wrap(~District)+
-  theme(legend.position = "none")
+  scale_fill_manual("Animal", values = primary.colors(15, steps = 3, no.white = TRUE))+
+  scale_y_continuous(n.breaks = 6)+
+  labs(y="Rescues",
+       title = "Animal rescues 2013/14 - 2022/23 by district")+
+  facet_wrap(~District, scales = "free_y", ncol = 4)+
+  theme(legend.position = c(0.85, 0.25)
+        ,axis.text.x = element_blank()
+        #, axis.text.x = element_text(size = 8, angle = 45, hjust = 1)
+        , axis.line.x = element_blank()
+        , axis.ticks.x = element_blank()
+        )
+animals_region
 
+ggsave("./outputs/animals_by_region.png", animals_region, device = png, type = "cairo", dpi = 96,
+       height = 797, width = 758, unit = "px", scale = 1.3)
 
 
 # 

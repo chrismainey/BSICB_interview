@@ -32,17 +32,18 @@ map_LA1<- ggplot() +
   ) + 
   
   geom_sf(data = map_LA_agg, aes(geometry = geometry, fill= Rescues)
-          , size = 1.5
+          , linewidth = 1.2
           , color = "black"
           #, fill = "cyan1"
   ) + 
-  geom_sf_text(data = shape_WM_LA, aes(label = LAD19NM), col="white", size=3.5)+
+  geom_sf_label(data = shape_WM_LA, aes(label = LAD19NM), col="black", size=3, alpha=0.6)+
   scale_fill_viridis_c(alpha=0.6, direction = 1)+
   #transition_time(year) +
   labs(title ="Animal Rescuse by District 2013/14 - 2022/23"
        , subtitle = "Data Source: https://www.cityobservatory.birmingham.gov.uk/@west-midlands-fire-service/animal-rescues") + 
   coord_sf()+
-  theme_map()
+  theme_map()+
+  theme(legend.position = c(0.8,0.75))
 
 map_LA1
 
@@ -66,7 +67,8 @@ yearsplt_district<- ggplot() +
           , 
   ) + 
   geom_sf(data =  map_LA_agg_yr, aes(geometry = geometry, fill= Rescues)
-          , size = 3
+          #, size = 5
+          , linewidth = 1.2
           , color = "black"
           #, fill = "cyan1"
           , alpha=0.5
@@ -77,7 +79,8 @@ yearsplt_district<- ggplot() +
   #         , color = "white"
   #         , fill = NA
   # ) + 
-  geom_sf_text(data = shape_WM_LA, aes(label = LAD19NM), col="black", size=2.7, fontface="bold")+
+  geom_sf_label(data = head(shape_WM_LA,7), aes(label = LAD19NM), col="black", size=2
+                , fontface="bold", alpha=0.6)+
   
   scale_fill_viridis_c(alpha = 0.5, na.value = 0)+
   transition_states(fyear, transition_length = 0, state_length = 1) +
@@ -91,7 +94,9 @@ yearsplt_district<- ggplot() +
         , panel.border = element_blank()
         , plot.title = element_text(family="Open Sans", face =  "bold", size = 12)
         , plot.subtitle = element_text(family="Open Sans", face =  "italic", size = 6)
-        , legend.title=element_text(size=9)
+        , legend.title=element_text(size=7)
+        , legend.text=element_text(size=6)
+        , legend.position = c(0.8,0.75)
   )
 
 

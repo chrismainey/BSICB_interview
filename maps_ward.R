@@ -120,18 +120,19 @@ map1<- ggplot() +
   ) + 
   
   geom_sf(data = map_LA_agg, aes(geometry = geometry)
-          , size = 2
-          , color = "white"
+          , linewidth = 1.2
+          , color = "black"
           , fill = NA
   ) + 
-  geom_sf_text(data = shape_WM_LA, aes(label = LAD19NM), col="white", size=3.5)+
+  geom_sf_label(data = shape_WM_LA, aes(label = LAD19NM), col="black", size=3, alpha=0.6)+
   
   scale_fill_viridis_c(alpha=0.5)+
   #transition_time(year) +
   labs(title ="Animal Rescues by Ward, for fiscal years 2013/14 - 2022/23"
             , subtitle = "Data Source: https://www.cityobservatory.birmingham.gov.uk/@west-midlands-fire-service/animal-rescues") + 
   coord_sf()+
-  theme_map()
+  theme_map()+
+  theme(legend.position = c(0.8,0.75))
 
 
 map1
@@ -156,11 +157,13 @@ yearsplt<- ggplot() +
           ) + 
   
   geom_sf(data = map_LA_agg, aes(geometry = geometry)
-          , size = 3
-          , color = "white"
+          #, size = 5
+          , linewidth = 1.2
+          , color = "black"
           , fill = NA
   ) + 
-  geom_sf_text(data = shape_WM_LA, aes(label = LAD19NM), col="black", size=2.7, fontface="bold")+
+  geom_sf_label(data = head(shape_WM_LA,7), aes(label = LAD19NM), col="black", size=2
+                , fontface="bold", alpha=0.6)+
   
   scale_fill_viridis_c(alpha = 0.5, na.value = 0)+
   transition_states(fyear, transition_length = 0, state_length = 1) +
@@ -174,7 +177,9 @@ yearsplt<- ggplot() +
         , panel.border = element_blank()
         , plot.title = element_text(family="Open Sans", face =  "bold", size = 12)
         , plot.subtitle = element_text(family="Open Sans", face =  "italic", size = 6)
-        , legend.title=element_text(size=9)
+        , legend.title=element_text(size=7)
+        , legend.text=element_text(size=6)
+        , legend.position = c(0.8,0.75)
   )
 
 #yearsplt
@@ -201,7 +206,7 @@ print(image, info = FALSE)
 
 image_info(image)
 
-r3<-image_crop(image = image, geometry = "480x318+0+81")
+r3<-image_crop(image = image, geometry = "480x340+0+68")
 print(r3, info = FALSE)
 
 image_write(r3, path = './outputs/anim_district_year2.gif')
@@ -216,7 +221,7 @@ print(image, info = FALSE)
 
 image_info(image)
 
-r4<-image_crop(image = image, geometry = "480x318+0+81")
+r4<-image_crop(image = image, geometry = "480x340+0+68")
 print(r4, info = FALSE)
 
 image_write(r4, path = './outputs/anim_wards_year2.gif')
@@ -231,7 +236,7 @@ print(image, info = FALSE)
 
 image_info(image)
 
-r5<-image_crop(image = image, geometry = "716x471+21+0")
+r5<-image_crop(image = image, geometry = "640x471+50+0")
 print(r5, info = FALSE)
 
 image_write(r5, path = './outputs/ward_map2.png')

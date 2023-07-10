@@ -64,6 +64,7 @@ class: title-slide
 <br><br><br><br><br>
 
 ### <img src="./assets/img/crop.png" alt="Mainard icon" height="40px" />  Dr Chris Mainey
+<br><br>
 
 `r icons::icon_style(icons::fontawesome("envelope"), fill = "#005EB8")` [c.mainey@nhs.net](mailto:c.mainey@nhs.net)
 `r icons::icon_style(icons::fontawesome("twitter"), fill = "#005EB8")` [@chrismainey](https://twitter.com/chrismainey)
@@ -99,7 +100,7 @@ Presentation on github with references and code, share afterwards
 + Numbers are too small to distinguish differences at ward level over time
 
 <br>
-+ Largest numbers seen in: Birmingham
++ Largest numbers seen in Birmingham
 + Reasonable to assume animal population relates to human population
 + Weighted with ONS population projections:
   + Coventry lowest, Birmingham average
@@ -154,10 +155,10 @@ Walsall, Sandwell, Wolverhampton showing number of animal rescues per fiscal yea
 # Timeseries problem
 
 
-+ When decomposed: clear increasing trend and annual seasonality
-+ Examined as both monthly and rolling periods
-+ Best performance with exponential smoothing and ARIMA
-+ 
++ When decomposed: clear increasing trend, annual seasonality suitable stationarity
++ Examined as both monthly and rolling periods (4-month chosen)
++ Best performance with ARIMA, exponential smoothing worked well.
++ 23/24 = 199, 2024/25 = 208, 2025/26 = 2018  - 625 over three years
 
 <centre>
 <img src="./outputs/four_month_rolling_forecast.png" alt="Seasonal timeseries component for animal rescue data in West Midlands, showing trend annual seasonality and error"  height="300" class="center"/>
@@ -177,9 +178,12 @@ Walsall, Sandwell, Wolverhampton showing number of animal rescues per fiscal yea
 .pull-left[
 # NLP / text mining
 
-+ Can use text to work out much of animal distribution.
-+ Tokenised to words using `tidytext`, stopwords removed.
-+ Lots of alternatives (e.g. dog, puppy, terrier etc.) - mapped with function.
++ Tokenised to words using `tidytext`, stopwords and numerics removed
++ Cats are always getting trapped / stuck!
++ Dogs next, and birds surprisingly high, with lots of alternatives
++ Alternatives (e.g. dog, puppy, terrier etc.) mapped with function.
++ Cats highest >3x higher than others in Birmingham
++ Horses comparatively highest in Walsall.
 
 <p float="left">
 <img src="./outputs/animal_words2.png" alt="Word cloud of from animal rescue text, showing 'cat' and stuck' to be most frequent"  width="250" height = "250"/>
@@ -192,9 +196,9 @@ Walsall, Sandwell, Wolverhampton showing number of animal rescues per fiscal yea
 ]
 
 .pull-right[
-
+<br>
 <centre>
-<img src="./outputs/animals_by_region.png" alt="Bar chart showing animal type by region for animal rescues in the West Midlands, showing 'cat' to be most common, but significantly so in Birmingham"  height="600" class="center"/>
+<img src="./outputs/animals_by_region.png" alt="Bar chart showing animal type by region for animal rescues in the West Midlands, showing 'cat' to be most common, but significantly so in Birmingham"  height="550" class="center"/>
 </centre>
 
 ]

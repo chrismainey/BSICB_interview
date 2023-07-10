@@ -129,6 +129,20 @@ animal_wm_ts %>%
 # Check autocorrelation
 animal_wm_ts %>%  ACF() %>%  autoplot()
 animal_wm_ts %>%  ACF(difference(Rescues)) %>%  autoplot()
+animal_wm_ts %>%  PACF() %>%  autoplot()
+animal_wm_ts %>%  PACF(difference(Rescues)) %>%  autoplot()
+
+animal_wm_ts %>% gg_tsdisplay(plot_type = "partial")
+
+lambda <- animal_wm_ts |>
+  features(Rescues, features = guerrero) |>
+  pull(lambda_guerrero)
+
+animal_wm_ts %>% gg_tsdisplay(y = box_cox(Rescues, lambda))
+
+animal_wm_ts |>
+  mutate(diff_close = difference(Rescues)) |>
+  features(diff_close, ljung_box, lag = 10)
 
 
 # decompose the timeseries
@@ -189,10 +203,29 @@ mods2 <-
     snaive = SNAIVE(`4-MA` ~ lag("year")),
     drift = RW(`4-MA` ~ drift()),
     ets = ETS(`4-MA`),
+    etsM = ETS(`4-MA` ~ error("M")+trend("A")+season("M")),
     ses = ETS(`4-MA` ~ error("A")+trend("N")+season("N")),
     `Holt-Winters additive` = ETS(`4-MA` ~ error("A")+trend("A")+season("A")),
     `Holt-Winters additive damped` = ETS(`4-MA` ~ error("A")+trend("Ad")+season("A")),
     arima = ARIMA(`4-MA`)
+  )
+
+mods3<-
+  animal_wm_ts %>% 
+  filter(dt_month >= yearmonth("2013 Aug")) %>% 
+  mutate(Rescuse_tr =  box_cox(Rescues, lambda)) %>% 
+  #stretch_tsibble(.init = 10) %>% 
+  model(
+    mean = MEAN(Rescuse_tr),
+    naive = NAIVE(Rescuse_tr),
+    snaive = SNAIVE(Rescuse_tr ~ lag("year")),
+    drift = RW(Rescuse_tr ~ drift()),
+    ets = ETS(Rescuse_tr),
+    etsM = ETS(Rescuse_tr ~ error("M")+trend("A")+season("M")),
+    ses = ETS(Rescuse_tr ~ error("A")+trend("N")+season("N")),
+    `Holt-Winters additive` = ETS(Rescuse_tr ~ error("A")+trend("A")+season("A")),
+    `Holt-Winters additive damped` = ETS(Rescuse_tr ~ error("A")+trend("Ad")+season("A")),
+    arima = ARIMA(Rescuse_tr)
   )
 
 
@@ -204,11 +237,18 @@ rolling_forecast <-
   mods2 %>% 
   forecast(h="36 months") 
 
+mnth_forecast_bc <-
+  mods3 %>% 
+  forecast(h="36 months") 
 
 accuracy(mods1)
 accuracy(mods2)
+accuracy(mods3)
 
 mods2$ets
+mods1$ets
+
+mods2$arima
 
 
 animal_rf <-
@@ -224,6 +264,37 @@ animal_rf$ucl <- animal_rf$`95%`$upper
 animal_rf <-
   animal_rf %>% 
   select(.model, dt_month, .model, `4-MA`, .mean, lcl, ucl)
+
+# Summarise forecast for arima
+animal_rf %>% 
+  filter(.model =="arima") %>% 
+  as_tibble() %>% 
+  summarise(sum(.mean))
+
+animal_rf %>% 
+  filter(.model =="arima") %>%  
+  as_tibble() %>% 
+  mutate(dt = as.Date(dt_month),
+         yearmon = as.yearmon(dt),
+         fyear = factor(
+           paste0(
+             as.character(
+               as.integer(yearmon - 3/12 + 1) - 1
+               )
+             , "/"
+             , substring(
+               as.character(
+                 as.integer(
+                   yearmon - 3/12 + 1)
+                 )
+               ,3
+               ,4)
+             )
+           , ordered = TRUE)) %>% 
+  group_by(fyear) %>% 
+  summarise(sum(.mean))
+
+
 
 animal_rolling_plot <-
   ggplot(animal_wm_ts, aes(x= as.Date(dt_month)))+

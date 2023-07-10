@@ -4,7 +4,7 @@
     <title>Analytical test</title>
     <meta charset="utf-8" />
     <meta name="author" content="Chris Mainey" />
-    <meta name="date" content="2023-07-08" />
+    <meta name="date" content="2023-07-10" />
     <script src="presentation_files/header-attrs/header-attrs.js"></script>
     <link rel="stylesheet" href="theme.css" type="text/css" />
   </head>
@@ -27,6 +27,7 @@ class: title-slide
 &lt;br&gt;&lt;br&gt;&lt;br&gt;&lt;br&gt;&lt;br&gt;
 
 ### &lt;img src="./assets/img/crop.png" alt="Mainard icon" height="40px" /&gt;  Dr Chris Mainey
+&lt;br&gt;&lt;br&gt;
 
 &lt;svg viewBox="0 0 512 512" style="height:1em;position:relative;display:inline-block;top:.1em;fill:#005EB8;" xmlns="http://www.w3.org/2000/svg"&gt;  &lt;path d="M464 64H48C21.49 64 0 85.49 0 112v288c0 26.51 21.49 48 48 48h416c26.51 0 48-21.49 48-48V112c0-26.51-21.49-48-48-48zm0 48v40.805c-22.422 18.259-58.168 46.651-134.587 106.49-16.841 13.247-50.201 45.072-73.413 44.701-23.208.375-56.579-31.459-73.413-44.701C106.18 199.465 70.425 171.067 48 152.805V112h416zM48 400V214.398c22.914 18.251 55.409 43.862 104.938 82.646 21.857 17.205 60.134 55.186 103.062 54.955 42.717.231 80.509-37.199 103.053-54.947 49.528-38.783 82.032-64.401 104.947-82.653V400H48z"&gt;&lt;/path&gt;&lt;/svg&gt; [c.mainey@nhs.net](mailto:c.mainey@nhs.net)
 &lt;svg viewBox="0 0 512 512" style="height:1em;position:relative;display:inline-block;top:.1em;fill:#005EB8;" xmlns="http://www.w3.org/2000/svg"&gt;  &lt;path d="M459.37 151.716c.325 4.548.325 9.097.325 13.645 0 138.72-105.583 298.558-298.558 298.558-59.452 0-114.68-17.219-161.137-47.106 8.447.974 16.568 1.299 25.34 1.299 49.055 0 94.213-16.568 130.274-44.832-46.132-.975-84.792-31.188-98.112-72.772 6.498.974 12.995 1.624 19.818 1.624 9.421 0 18.843-1.3 27.614-3.573-48.081-9.747-84.143-51.98-84.143-102.985v-1.299c13.969 7.797 30.214 12.67 47.431 13.319-28.264-18.843-46.781-51.005-46.781-87.391 0-19.492 5.197-37.36 14.294-52.954 51.655 63.675 129.3 105.258 216.365 109.807-1.624-7.797-2.599-15.918-2.599-24.04 0-57.828 46.782-104.934 104.934-104.934 30.213 0 57.502 12.67 76.67 33.137 23.715-4.548 46.456-13.32 66.599-25.34-7.798 24.366-24.366 44.833-46.132 57.827 21.117-2.273 41.584-8.122 60.426-16.243-14.292 20.791-32.161 39.308-52.628 54.253z"&gt;&lt;/path&gt;&lt;/svg&gt; [@chrismainey](https://twitter.com/chrismainey)
@@ -62,7 +63,7 @@ Presentation on github with references and code, share afterwards
 + Numbers are too small to distinguish differences at ward level over time
 
 &lt;br&gt;
-+ Largest numbers seen in: Birmingham
++ Largest numbers seen in Birmingham
 + Reasonable to assume animal population relates to human population
 + Weighted with ONS population projections:
   + Coventry lowest, Birmingham average
@@ -117,10 +118,10 @@ Walsall, Sandwell, Wolverhampton showing number of animal rescues per fiscal yea
 # Timeseries problem
 
 
-+ When decomposed: clear increasing trend and annual seasonality
-+ Examined as both monthly and rolling periods
-+ Best performance with exponential smoothing and ARIMA
-+ 
++ When decomposed: clear increasing trend, annual seasonality suitable stationarity
++ Examined as both monthly and rolling periods (4-month chosen)
++ Best performance with ARIMA, exponential smoothing worked well.
++ 23/24 = 199, 2024/25 = 208, 2025/26 = 2018  - 625 over three years
 
 &lt;centre&gt;
 &lt;img src="./outputs/four_month_rolling_forecast.png" alt="Seasonal timeseries component for animal rescue data in West Midlands, showing trend annual seasonality and error"  height="300" class="center"/&gt;
@@ -140,9 +141,12 @@ Walsall, Sandwell, Wolverhampton showing number of animal rescues per fiscal yea
 .pull-left[
 # NLP / text mining
 
-+ Can use text to work out much of animal distribution.
-+ Tokenised to words using `tidytext`, stopwords removed.
-+ Lots of alternatives (e.g. dog, puppy, terrier etc.) - mapped with function.
++ Tokenised to words using `tidytext`, stopwords and numerics removed
++ Cats are always getting trapped / stuck!
++ Dogs next, and birds surprisingly high, with lots of alternatives
++ Alternatives (e.g. dog, puppy, terrier etc.) mapped with function.
++ Cats highest &gt;3x higher than others in Birmingham
++ Horses comparatively highest in Walsall.
 
 &lt;p float="left"&gt;
 &lt;img src="./outputs/animal_words2.png" alt="Word cloud of from animal rescue text, showing 'cat' and stuck' to be most frequent"  width="250" height = "250"/&gt;
@@ -155,9 +159,9 @@ Walsall, Sandwell, Wolverhampton showing number of animal rescues per fiscal yea
 ]
 
 .pull-right[
-
+&lt;br&gt;
 &lt;centre&gt;
-&lt;img src="./outputs/animals_by_region.png" alt="Bar chart showing animal type by region for animal rescues in the West Midlands, showing 'cat' to be most common, but significantly so in Birmingham"  height="600" class="center"/&gt;
+&lt;img src="./outputs/animals_by_region.png" alt="Bar chart showing animal type by region for animal rescues in the West Midlands, showing 'cat' to be most common, but significantly so in Birmingham"  height="550" class="center"/&gt;
 &lt;/centre&gt;
 
 ]

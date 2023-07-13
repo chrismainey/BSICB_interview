@@ -13,7 +13,7 @@ output:
       highlightStyle: github
       highlightLines: true
       ratio: 16:9
-      countIncrementalSlides: true
+      countIncrementalSlides: false
 ---
 
 ```{r setup, include=FALSE}
@@ -90,36 +90,37 @@ Presentation on github with references and code, share afterwards
 
 ---
 
-.pull-left[
+.pull-left-half[
 # Overview
 
 ## What? When? 
 + Dataset from WMFS detailing animal rescues
-+ No data dictionary, but clear date, District & Ward, free-text description
-+ Dates: 02/04/2013 - 31/03/2023 (10 years, likely fiscal years)
++ __No data dictionary__, but clear date, District & Ward, free-text description
++ __Dates:__ 02/04/2013 - 31/03/2023 (10 years, likely fiscal years)
 + Numbers are too small to distinguish differences at ward level over time
 
-<br>
+]
+
+.pull-right-half[
+<img src="./outputs/district_fyear.png" alt="stacked line chart for Coventry, Solihull, Birmingham,
+Walsall, Sandwell, Wolverhampton showing increases in pet rescues over 10 years 2013 / 2023"  class="center"/>
+]
+
+--
+
+.pull-left-half[
 + Largest numbers seen in Birmingham
 + Reasonable to assume animal population relates to human population
 + Weighted with ONS population projections:
   + Coventry lowest, Birmingham average
   + Dudley highest
 
-
 ]
+<br>
 
-.pull-right[
-<centre>
-<img src="./outputs/district_fyear.png" alt="stacked line chart for Coventry, Solihull, Birmingham,
-Walsall, Sandwell, Wolverhampton showing increases in pet rescues over 10 years 2013 / 2023"  class="center"/>
-<br> 
-
+.pull-right-half[
 <img src="./outputs/raw_vs_weighted.png" alt="Bar charts comparing animal rescues per 1000 population in Coventry,
-Solihull, Birmingham, Walsall, Sandwell, Wolverhampton against absolute numbers. Birminghas higher numbers but is average in proportion to it's population."  class="center"/>
-</centre>
-
-
+Solihull, Birmingham, Walsall, Sandwell, Wolverhampton against absolute numbers. Birmingham higher numbers but is average in proportion to it's population." class="center"/>
 ]
 
 
@@ -132,8 +133,8 @@ Solihull, Birmingham, Walsall, Sandwell, Wolverhampton against absolute numbers.
 <img src="./outputs/ward_map2.png" alt="Map of wards in Coventry, Solihull, Birmingham,
 Walsall, Sandwell, Wolverhampton showing total number of animal rescues over fiscal year 2013 - 2023"  class="center"/>
 
-+ Ladywood - Birmingham (25)
-+ St. Michael's - Coventry (18)
++ __Ladywood__ - Birmingham (25)
++ __St. Michael's__ - Coventry (18)
 + Including Boardsley Green, Nechells, Perry Bar, Soho & Jewellery quarter, Aston, Bartley Green
 + Sutton Trinity - Birmingham(17), Brierly Hill - Dudley(15)
 
@@ -142,11 +143,11 @@ Walsall, Sandwell, Wolverhampton showing total number of animal rescues over fis
 .pull-right[
 <centre>
 <img src="./outputs/anim_district_year2.gif" alt="Animated map of districts in Coventry, Solihull, Birmingham,
-Walsall, Sandwell, Wolverhampton showing number of animal rescues per fiscal year 2013 - 2023" height="300" class="center"/>
+Walsall, Sandwell, Wolverhampton showing number of animal rescues per fiscal year 2013 - 2023" height="320" class="center"/>
 <br>
 
 <img src="./outputs/anim_wards_year2.gif" alt="Animated map of wards in Coventry, Solihull, Birmingham,
-Walsall, Sandwell, Wolverhampton showing number of animal rescues per fiscal year 2013 - 2023"  height="300" class="center"/>
+Walsall, Sandwell, Wolverhampton showing number of animal rescues per fiscal year 2013 - 2023"  height="320" class="center"/>
 </centre>
 ]
 
@@ -155,20 +156,20 @@ Walsall, Sandwell, Wolverhampton showing number of animal rescues per fiscal yea
 # Timeseries problem
 
 
-+ When decomposed: clear increasing trend, annual seasonality suitable stationarity
++ When decomposed: clear increasing trend, annual seasonality, suitable stationarity
 + Examined as both monthly and rolling periods (4-month chosen)
 + Best performance with ARIMA, exponential smoothing worked well.
-+ 23/24 = 199, 2024/25 = 208, 2025/26 = 2018  - 625 over three years
++ 23/24 = 199, 2024/25 = 208, 2025/26 = 2018  - __625 over three years__
 
 <centre>
-<img src="./outputs/four_month_rolling_forecast.png" alt="Seasonal timeseries component for animal rescue data in West Midlands, showing trend annual seasonality and error"  height="300" class="center"/>
+<img src="./outputs/four_month_rolling_forecast.png" alt="Seasonal timeseries component for animal rescue data in West Midlands, showing trend annual seasonality and error"  height="320" class="center"/>
 </centre>
 
 ]
 
 .pull-right[
 <centre>
-<img src="./outputs/time_series_components.png" alt="Seasonal timeseries component for animal rescue data in West Midlands, showing trend annual seasonality and error"  height="600" class="center"/>
+<img src="./outputs/time_series_components.png" alt="Seasonal timeseries component for animal rescue data in West Midlands, showing trend annual seasonality and error"  height="620" class="center"/>
 </centre>
 ]
 
@@ -179,26 +180,22 @@ Walsall, Sandwell, Wolverhampton showing number of animal rescues per fiscal yea
 # NLP / text mining
 
 + Tokenised to words using `tidytext`, stopwords and numerics removed
-+ Cats are always getting trapped / stuck!
++ __Cats are always getting trapped / stuck!__
 + Dogs next, and birds surprisingly high, with lots of alternatives
 + Alternatives (e.g. dog, puppy, terrier etc.) mapped with function.
 + Cats highest >3x higher than others in Birmingham
 + Horses comparatively highest in Walsall.
 
 <p float="left">
-<img src="./outputs/animal_words2.png" alt="Word cloud of from animal rescue text, showing 'cat' and stuck' to be most frequent"  width="250" height = "250"/>
+<img src="./outputs/animal_words2.png" alt="Word cloud of from animal rescue text, showing 'cat' and stuck' to be most frequent"  width="252" height = "252"/>
 <img src="./outputs/animal_bigrams2.png" alt="Word cloud of bi-grams from animal rescue text, showing 'cat stuck' to be most frequent"  width="250" height = "250"/>
 </p>
 
-
-<!-- <img src="./outputs/animal_words2.png" alt="Word cloud of from animal rescue text, showing 'cat' and stuck' to be most frequent"  width="100" class="left"/><img src="./outputs/animal_bigrams2.png" alt="Word cloud of bi-grams from animal rescue text, showing 'cat stuck' to be most frequent"  width="100" class="right"/> -->
-
 ]
-
+--
 .pull-right[
-<br>
 <centre>
-<img src="./outputs/animals_by_region.png" alt="Bar chart showing animal type by region for animal rescues in the West Midlands, showing 'cat' to be most common, but significantly so in Birmingham"  height="550" class="center"/>
+<img src="./outputs/animals_by_region.png" alt="Bar chart showing animal type by region for animal rescues in the West Midlands, showing 'cat' to be most common, but significantly so in Birmingham"  height="610" class="center"/>
 </centre>
 
 ]
@@ -206,16 +203,29 @@ Walsall, Sandwell, Wolverhampton showing number of animal rescues per fiscal yea
 ---
 # What else?
 
-+ No explicit question. What are the questions?
-+ Local (District) forecasts - help planning of resources
-+ Times in the data:
+.pull-left[
++ __No explicit question. What are the questions?__
+
++ __Local (District) forecasts - help planning of resources__
+
++ __Times in the data:__
   + Time of day analysis
   + Time taken for rescues
-+ Compare to other call out data
+
++ __Compare to other callout data__
   + Relative time taken
   + Effects on availability / opportunity cost
-+ Augment future data capture:
+
++ __Augment future data capture:__
   + Record animal distinctly
   + Equipment needed
   + Time taken
-  + Is time associated it particular types of rescue/animal?
+  + Is time associated with particular types of rescue/animal?
+]
+
+.pull-right[
+<br><br><br><br><br><br><br>
+<center>
+<h1>Any questions?</h1>
+</center>
+]

@@ -86,7 +86,7 @@ h1, h2, h3 {
 .remark-slide-content {
   background-color: var(--background-color);
   font-size: 1rem;
-  padding: 16px 64px 16px 64px;
+  padding: 12px 64px 0px 64px;
   width: 100%;
   height: 100%;
 }
@@ -115,10 +115,11 @@ h1, h2, h3 {
   color: #F97B64;
 }
 .remark-slide-number {
-  color: #FEFDFD;
+  color: #768692;
   opacity: 1;
   font-size: 0.9rem;
 }
+
 strong {
   font-weight: bold;
   color: var(--text-bold-color);
@@ -226,10 +227,35 @@ a, a > code {
   float: left;
   width: 47%;
 }
+.pull-left-half {
+  float: left;
+  width: 47%;
+  height: 50%;
+}
+
 .pull-right {
   float: right;
   width: 47%;
+  
 }
+.pull-right-half {
+  float: right;
+  width: 47%;
+  height: 50%;
+}
+
+.pull-right-half p {
+  /*padding: 0.0001px !important;*/
+  margin: 0px;
+  display: block;
+  margin-block-start:0.8em;
+  margin-block-end: 0.8em;
+  margin-inline-start: 0px;
+  margin-inline-end: 0px;
+}
+
+
+
 .pull-right + * {
   clear: both;
 }
@@ -303,6 +329,11 @@ table.dataTable.hover tbody tr:hover, table.dataTable.display tbody tr:hover {
   margin-right: auto;
 }
 .remark-slide-content.right pre {
+  margin-left: auto;
+  margin-right: unset;
+}
+
+.remark-slide-content.right-half pre {
   margin-left: auto;
   margin-right: unset;
 }

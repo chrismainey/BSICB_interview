@@ -37,6 +37,7 @@ pop <- pop_est %>%
 # NOw same idea for projections
 
 pop_2 <- pop_proj %>% 
+  filter(AGE.GROUP == "All ages") %>%
   filter(AREA %in% unique(animal_dt$District)) %>% 
   select(AREA
          , population_2021 = ...2021
